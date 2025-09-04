@@ -1,0 +1,56 @@
+[package]
+name = "cargo-status"
+version = "0.1.0"
+edition = "2024"
+description = "A configurable cargo project status checker"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/adamNewell/cargo-status"
+keywords = ["cargo", "development", "tools"]
+categories = ["development-tools"]
+
+[[bin]]
+name = "cargo-status"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+colored = "3.0.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+dirs = "6.0.0"
+anyhow = "1.0.99"
+toml = "0.8"
+rayon = "1.10"
+thiserror = "2.0"
+walkdir = "2.5"
+lazy_static = "1.4"
+
+[dev-dependencies]
+tempfile = "3.8"
+
+# Configuration for cargo-status
+[package.metadata.cargo-status]
+# Enable/disable specific checks by default
+[package.metadata.cargo-status.checks]
+fmt = true
+check = true
+clippy = true
+test = true
+build = false  # Don't run build by default
+doc = false    # Don't generate docs by default
+audit = false  # Don't run audit by default (requires network)
+
+# Per-tool verbose settings
+[package.metadata.cargo-status.verbose_tools]
+fmt = false
+check = false
+clippy = false
+test = false
+build = false
+doc = false
+audit = false
+
+# Other settings
+sequential = false  # Run checks in parallel by default
+verbose = false     # Quiet mode by default
