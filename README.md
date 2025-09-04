@@ -60,6 +60,17 @@ Status Summary:
 Some checks failed ✗
 ```
 
+## ⚠️ Important Usage Notes
+
+### Avoid Running on cargo-status Itself
+**Do not run `cargo status` in the cargo-status project directory!** This can cause excessive process spawning as the tool attempts to check itself. Instead:
+
+1. Install cargo-status globally: `cargo install cargo-status`
+2. Run it from your other Rust projects
+3. If developing cargo-status, test it from a separate test project
+
+The tool includes safety checks to warn about and prevent recursive execution.
+
 ## Available Checks
 
 | Flag | Long Form  | Description                                        |
@@ -310,6 +321,47 @@ doc = false    # Internal apps may not need docs
 [package.metadata.cargo-status.verbose_tools]
 test = true
 build = true   # See compilation output
+
+# Custom arguments for tools
+[package.metadata.cargo-status.tool_args]
+clippy = ["--", "-W", "clippy::pedantic"]  # Enable pedantic lints
+test = ["--", "--nocapture"]               # Show test output
+build = ["--release"]                      # Build in release mode
+```
+
+## Tool Arguments
+
+You can customize arguments passed to each tool using the `tool_args` section in your `Cargo.toml`:
+
+```toml
+[package.metadata.cargo-status.tool_args]
+fmt = ["--check"]                          # Check formatting without modifying
+check = ["--lib"]                          # Only check library code
+clippy = ["--", "-W", "clippy::pedantic"]  # Enable additional lints
+test = ["--", "--nocapture"]               # Show test output
+build = ["--release"]                      # Build optimized
+doc = ["--open"]                          # Open docs after generating
+audit = ["--ignore", "RUSTSEC-2020-0071"] # Ignore specific advisories
+```
+
+### Examples
+
+**Format checking only:**
+```toml
+[package.metadata.cargo-status.tool_args]
+fmt = ["--check"]  # Don't modify files, just check
+```
+
+**Strict clippy lints:**
+```toml
+[package.metadata.cargo-status.tool_args]
+clippy = ["--", "-W", "clippy::pedantic", "-W", "clippy::nursery"]
+```
+
+**Release builds:**
+```toml
+[package.metadata.cargo-status.tool_args]
+build = ["--release", "--target", "x86_64-unknown-linux-gnu"]
 ```
 
 ## Tips and Tricks

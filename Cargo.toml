@@ -20,11 +20,12 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 dirs = "6.0.0"
 anyhow = "1.0.99"
-toml = "0.8"
-rayon = "1.10"
+toml = "0.9.5"
 thiserror = "2.0"
-walkdir = "2.5"
 lazy_static = "1.4"
+# Real-time display dependencies
+crossterm = "0.29.0"
+console = "0.16.0"
 
 [dev-dependencies]
 tempfile = "3.8"
@@ -50,6 +51,16 @@ test = false
 build = false
 doc = false
 audit = false
+
+# Custom arguments for each tool
+[package.metadata.cargo-status.tool_args]
+fmt = ["--check"]  # Check formatting without modifying files
+check = []  # Example: ["--lib"] to only check library code
+clippy = []  # Example: ["--", "-W", "clippy::pedantic"] for pedantic lints
+test = []  # Example: ["--", "--nocapture"] to show test output
+build = []  # Example: ["--release"] to build in release mode
+doc = []  # Example: ["--open"] to open docs after generating
+audit = []  # Example: ["--ignore", "RUSTSEC-2020-0071"] to ignore advisories
 
 # Other settings
 sequential = false  # Run checks in parallel by default
